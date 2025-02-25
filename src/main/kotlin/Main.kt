@@ -22,17 +22,21 @@ fun App(database: Database) {
     MaterialTheme {
         Surface {
             when (router.currentRoute) {
+
                 Routes.LOGIN -> LoginScreen({ email, password ->
                     println("Tentative de connexion avec $email et un mot de passe ${password}")
                     if ((database.from(Caristes).select().where {
                             (Caristes.login eq email) and (Caristes.mdp eq password)
                         }).iterator().hasNext()) {
+                        print(router)
+
                         router.navigateTo(route = Routes.HOME)
                     }
                 })
 
-                Routes.HOME -> HomeScreen()
+                Routes.HOME -> HomeScreen{route -> router.navigateTo(route)}
             }
+
 
 
         }

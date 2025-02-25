@@ -11,20 +11,22 @@ import androidx.compose.ui.Modifier
 import ui.LoginScreen
 import routing.Router
 import routing.Routes
-
+import ui.HomeScreen
+import ui.LoginScreen
 
 @Composable
 @Preview
-fun HomeScreen() {
+fun HomeScreen(onNavigate:(Routes)->Unit) {
     val router = remember { Router() }
 
     Column {
-        Text("Coucou")
-
         Button(
             onClick = {
                 print("Go to HOME")
-                router.navigateTo(route = Routes.HOME)
+                onNavigate(Routes.HOME)
+
+                print(router)
+
             },
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -33,12 +35,16 @@ fun HomeScreen() {
         Button(
             onClick = {
                 print("Go to LOGIN")
+                onNavigate(Routes.LOGIN)
 
-                router.navigateTo(route = Routes.LOGIN)
+
+                print(router)
             },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Gestion structure")
         }
     }
+    print("sortie homescreen")
+
 }
