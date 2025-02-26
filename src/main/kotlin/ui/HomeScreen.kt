@@ -13,6 +13,9 @@ import routing.Router
 import routing.Routes
 import ui.HomeScreen
 import ui.LoginScreen
+import ui.StockScreen
+import ui.CaristesScreen
+
 
 @Composable
 @Preview
@@ -22,11 +25,7 @@ fun HomeScreen(onNavigate:(Routes)->Unit) {
     Column {
         Button(
             onClick = {
-                print("Go to HOME")
                 onNavigate(Routes.HOME)
-
-                print(router)
-
             },
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -34,15 +33,19 @@ fun HomeScreen(onNavigate:(Routes)->Unit) {
         }
         Button(
             onClick = {
-                print("Go to LOGIN")
-                onNavigate(Routes.LOGIN)
-
-
-                print(router)
+                onNavigate(Routes.STOCK)
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Gestion structure")
+            Text("Gestion Stock")
+        }
+        Button(
+            onClick = {
+                onNavigate(Routes.CARISTES)
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Gestion Caristes")
         }
     }
     print("sortie homescreen")

@@ -13,6 +13,8 @@ import routing.Router
 import routing.Routes
 import ui.HomeScreen
 import ui.LoginScreen
+import ui.StockScreen
+import ui.CaristesScreen
 
 @Composable
 @Preview
@@ -28,13 +30,16 @@ fun App(database: Database) {
                     if ((database.from(Caristes).select().where {
                             (Caristes.login eq email) and (Caristes.mdp eq password)
                         }).iterator().hasNext()) {
-                        print(router)
 
                         router.navigateTo(route = Routes.HOME)
                     }
                 })
 
                 Routes.HOME -> HomeScreen{route -> router.navigateTo(route)}
+
+                Routes.STOCK -> StockScreen(database){ route -> router.navigateTo(route)}
+                Routes.CARISTES -> CaristesScreen(database){ route -> router.navigateTo(route)}
+
             }
 
 
