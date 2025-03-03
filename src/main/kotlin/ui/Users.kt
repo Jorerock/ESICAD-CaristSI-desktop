@@ -36,7 +36,10 @@ fun CaristesScreen(database : Database, onNavigate:(Routes)->Unit) {
         modifier = Modifier.fillMaxWidth().padding(16.dp), elevation = 4.dp
     ){
 
-        Column {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ){
             Button(
                 onClick = {
                     onNavigate(Routes.HOME)
@@ -44,6 +47,14 @@ fun CaristesScreen(database : Database, onNavigate:(Routes)->Unit) {
                 modifier = Modifier.padding(vertical = 8.dp)
             ) {
                 Text("Retour")
+            }
+            Button(
+                onClick = {
+                    onNavigate(Routes.NEWCARISTES)
+                },
+                modifier = Modifier.padding(vertical = 8.dp)
+            ) {
+                Text("Créer un nouveau cariste")
             }
             // Table Header
             Row {
@@ -60,7 +71,7 @@ fun CaristesScreen(database : Database, onNavigate:(Routes)->Unit) {
                 var isEditMode by remember { mutableStateOf(false) }
 
                 Row {
-                    Text(user.id.toString(), modifier = Modifier.weight(1f))
+                    Text(user.ID_Cariste .toString(), modifier = Modifier.weight(1f))
 
                     OutlinedTextField(
                         value = Caristenom,
@@ -75,11 +86,10 @@ fun CaristesScreen(database : Database, onNavigate:(Routes)->Unit) {
                         modifier = Modifier.weight(3f)
                     )
 
-
                     Button(
                         onClick = {
                             val updatedcariste = Cariste(
-                                id = user.id,
+                                ID_Cariste  = user.ID_Cariste,
                                 nom = Caristenom.text,
                                 prenom = CaristePrenom.text
                             )
@@ -88,7 +98,7 @@ fun CaristesScreen(database : Database, onNavigate:(Routes)->Unit) {
 
                         modifier = Modifier.weight(4f).padding(vertical = 8.dp)
                     ) {
-                        Text(if (isEditMode) "Désactiver édition" else "Activer édition")
+                        Text("Modifier")
 
                     }
                 }
@@ -113,7 +123,7 @@ fun requestUsers(): List<Cariste> {
                 while (resultSet.next()) {
                     users.add(
                         Cariste(
-                            id = resultSet.getInt("id"),
+                            ID_Cariste  = resultSet.getInt("ID_Cariste"),
                             nom = resultSet.getString("Nom"),
                             prenom = resultSet.getString("prenom")
                         )
@@ -128,7 +138,7 @@ fun requestUsers(): List<Cariste> {
 }
 
 data class Cariste(
-    val id: Int,
+    val ID_Cariste: Int,
     val nom: String,
     val prenom: String
 )
@@ -142,7 +152,7 @@ fun UpdateUser(database : Database, cariste : Cariste): String {
             set(Caristes.nom, cariste.nom)
             set(Caristes.prenom, cariste.prenom)
             where {
-                Caristes.id eq cariste.id
+                Caristes.ID_cariste eq cariste.ID_Cariste
             }
         }
 

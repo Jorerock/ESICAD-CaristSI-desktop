@@ -25,20 +25,13 @@ fun HomeScreen(onNavigate:(Routes)->Unit) {
     Column {
         Button(
             onClick = {
-                onNavigate(Routes.HOME)
+                onNavigate(Routes.RECHERCHE)
             },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Suivis des colis")
         }
-        Button(
-            onClick = {
-                onNavigate(Routes.STOCK)
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Gestion Stock")
-        }
+
         Button(
             onClick = {
                 onNavigate(Routes.CARISTES)
@@ -47,7 +40,14 @@ fun HomeScreen(onNavigate:(Routes)->Unit) {
         ) {
             Text("Gestion Caristes")
         }
+        Button(
+            onClick = {
+                onNavigate(Routes.ALLEE)
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Gestion Stocks")
+        }
     }
     print("sortie homescreen")
-
 }

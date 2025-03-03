@@ -18,70 +18,114 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import ktorm.Caristes
+import ktorm.colis
 import org.ktorm.database.Database
 import org.ktorm.dsl.*
-
 
 import java.sql.DriverManager
 
 
 
 @Composable
-fun StockScreen(database : Database, onNavigate:(Routes)->Unit) {
-    val caristes = request()
+fun StockScreen(database : Database,AlleeSelectione : Int , onNavigate:(Routes)->Unit) {
+    val allees = listOf("1", "2", "3", "4", "5")
+    var Selection = AlleeSelectione
+    var Stocks = request(Selection)
 
-    Card() {
-    }
     Card(
         modifier = Modifier.fillMaxWidth().padding(16.dp), elevation = 4.dp
     ){
 
         Column {
+            Button(
+                onClick = {
+                    onNavigate(Routes.HOME)
+                },
+                modifier = Modifier.padding(vertical = 8.dp)
+            ) {
+                Text("Retour")
+            }
+            Row {
+            allees.forEach { allee ->
+                Button(
+                    onClick = {
+                        Selection = allee.toInt()
+
+                        Stocks = request(Selection)
+
+                        println(Stocks)
+                    },
+                    modifier = Modifier.padding(vertical = 8.dp)
+                ) {
+                    Text(allee)
+                }
+            }
+        }
+
+
+
             // Table Header
             Row {
-                Text("id", modifier = Modifier.weight(1f))
-                Text("Nom", modifier = Modifier.weight(2f))
-                Text("Prenom", modifier = Modifier.weight(3f))
+                Text("NumeroCol", modifier = Modifier.weight(1f))
+                Text("Longueur", modifier = Modifier.weight(2f))
+                Text("Largeur", modifier = Modifier.weight(3f))
                 Text("Action", modifier = Modifier.weight(4f))
 
             }
             // Table Rows
-            caristes.forEach { user ->
-                var Caristenom by remember { mutableStateOf(TextFieldValue(user.nom)) }
-                var CaristePrenom by remember { mutableStateOf(TextFieldValue(user.prenom)) }
-                var isEditMode by remember { mutableStateOf(false) }
+            Stocks.forEach { Stock ->
+                var NumeroCol by remember { mutableStateOf(Stock.NumeroCol.toString()) }
+                var Longueur by remember { mutableStateOf((Stock.Longueur.toString())) }
+                var Largeur by remember { mutableStateOf(Stock.Largeur.toString())}
 
                 Row {
-                    Text(user.id.toString(), modifier = Modifier.weight(1f))
+                    Text(Stock.NumeroCol.toString(), modifier = Modifier.weight(1f))
 
-                        OutlinedTextField(
-                            value = Caristenom,
-                            onValueChange = { Caristenom = it },
-                            label = { Caristenom },
-                            modifier = Modifier.weight(2f)
-                        )
-                        OutlinedTextField(
-                            value = CaristePrenom,
-                            onValueChange = { CaristePrenom = it },
-                            label = { CaristePrenom },
-                            modifier = Modifier.weight(3f)
-                        )
+                    OutlinedTextField(
+                        value = Longueur,
+                        onValueChange = { newValue ->
+                            // Vous pouvez ajouter une validation ici si nécessaire
+                            Longueur = newValue
+                            // Pour mettre à jour la valeur dans votre modèle:
+                            // Convertir en Int avec gestion d'erreur
+                            newValue.toIntOrNull()?.let { numCol ->
+                                Longueur = numCol.toString()
+                            }
+                        },
+                        label = { Text("Longueur") },
+                        modifier = Modifier.weight(2f),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                    )
 
+                    OutlinedTextField(
+                        value = Largeur,
+                        onValueChange = { newValue ->
+                            // Vous pouvez ajouter une validation ici si nécessaire
+                            Largeur = newValue
+                            // Pour mettre à jour la valeur dans votre modèle:
+                            // Convertir en Int avec gestion d'erreur
+                            newValue.toIntOrNull()?.let { numCol ->
+                                Largeur = numCol.toString()
+                            }
+                        },
+                        label = { Text("Largeur") },
+                        modifier = Modifier.weight(3f),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                    )
 
                     Button(
                         onClick = {
-                            val updatedStocks = Stocks(
-                                id = user.id,
-                                nom = Caristenom.text,
-                                prenom = CaristePrenom.text
+                            val updatedStocks = Stock(
+                                NumeroCol = NumeroCol.toInt(),
+                                Longueur = Longueur.toInt(),
+                                Largeur = Largeur.toInt()
                             )
                             sendData(database, updatedStocks)
                                   },
 
                         modifier = Modifier.weight(4f).padding(vertical = 8.dp)
                     ) {
-                        Text(if (isEditMode) "Désactiver édition" else "Activer édition")
-
+                        Text("Modifier")
                     }
                 }
             }
@@ -89,8 +133,9 @@ fun StockScreen(database : Database, onNavigate:(Routes)->Unit) {
     }
 }
 
-fun request(): List<Cariste> {
-    val users = mutableListOf<Cariste>()
+
+fun request(AlleeSelectione: Int ): List<Stock> {
+    val Stocks = mutableListOf<Stock>()
     val url = "jdbc:mysql://localhost:3306/carist-si"
     val user = "root"
     val password = ""
@@ -99,15 +144,21 @@ fun request(): List<Cariste> {
     try {
         Class.forName("com.mysql.cj.jdbc.Driver")
         DriverManager.getConnection(url, user, password).use { connection ->
-            val query = "SELECT * FROM caristes"
+            val query = "select * from colis \n" +
+                    "join place on colis.ID_Colis = place.ID_Emplacement \n" +
+                    "join emplacement on place.ID_Emplacement = emplacement.ID_Emplacement \n" +
+                    "join etage on etage.ID_Etage = emplacement.ID_Etage\n" +
+                    "join colonne on etage.ID_Colonne = colonne.ID_Colonne \n" +
+                    "join allee on colonne.ID_Allee = allee.ID_Allee\n" +
+                    "where emplacement.ID_Emplacement = '"+AlleeSelectione.toString()+"'"
             connection.createStatement().use { statement ->
                 val resultSet = statement.executeQuery(query)
                 while (resultSet.next()) {
-                    users.add(
-                        Cariste(
-                            id = resultSet.getInt("id"),
-                            nom = resultSet.getString("Nom"),
-                            prenom = resultSet.getString("prenom")
+                    Stocks.add(
+                        Stock(
+                            NumeroCol = resultSet.getInt("colonne.NumeroCol"),
+                            Longueur = resultSet.getInt("colis.Longueur"),
+                            Largeur = resultSet.getInt("colis.Largeur")
                         )
                     )
                 }
@@ -116,25 +167,25 @@ fun request(): List<Cariste> {
     } catch (e: Exception) {
         e.printStackTrace()
     }
-    return users
+    return Stocks
 }
 
-data class Stocks(
-    val id: Int,
-    val nom: String,
-    val prenom: String
+data class Stock(
+    val NumeroCol: Int,
+    val Longueur: Int,
+    val Largeur: Int
 )
 
-fun sendData(database : Database, cariste : Stocks): String {
+fun sendData(database : Database, stock : Stock): String {
 
     try {
 
-        println("update cariste"+ cariste)
+        println("update cariste"+ stock)
         database.update(Caristes) {
-            set(Caristes.nom, cariste.nom)
-            set(Caristes.prenom, cariste.prenom)
+            set(colis.Largeur, stock.Largeur)
+            set(colis.Longueur, stock.Longueur)
             where {
-                Caristes.id eq cariste.id
+                Caristes.ID_cariste eq stock.NumeroCol
             }
         }
 
@@ -143,3 +194,4 @@ fun sendData(database : Database, cariste : Stocks): String {
     }
     return "done"
 }
+

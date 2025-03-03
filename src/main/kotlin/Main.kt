@@ -11,16 +11,13 @@ import org.ktorm.database.asIterable
 import org.ktorm.dsl.*
 import routing.Router
 import routing.Routes
-import ui.HomeScreen
-import ui.LoginScreen
-import ui.StockScreen
-import ui.CaristesScreen
+import ui.*
 
 @Composable
 @Preview
 fun App(database: Database) {
     val router = remember { Router() }
-
+    var currentSelectedID = 1
     MaterialTheme {
         Surface {
             when (router.currentRoute) {
@@ -35,10 +32,32 @@ fun App(database: Database) {
                     }
                 })
 
+
+
+                Routes.RECHERCHE -> RechercheColis({ ID1 ->
+                    println("recherche de ID_Colis "+ID1)
+                        router.navigateTo(route = Routes.COLIS)
+                        currentSelectedID = ID1
+                },{route -> router.navigateTo(route)})
+
+
+
                 Routes.HOME -> HomeScreen{route -> router.navigateTo(route)}
 
-                Routes.STOCK -> StockScreen(database){ route -> router.navigateTo(route)}
+                Routes.STOCK -> StockScreen(database,1){ route -> router.navigateTo(route)}
                 Routes.CARISTES -> CaristesScreen(database){ route -> router.navigateTo(route)}
+                Routes.ALLEE -> AlleeScreen(database){ route -> router.navigateTo(route)}
+                Routes.COLONNE -> colonneScreen(database,1){ route -> router.navigateTo(route)}
+                Routes.EMPLACEMENT -> EmplacementScreen(database,1){ route -> router.navigateTo(route)}
+                Routes.ETAGE -> etageScreen(database,1){ route -> router.navigateTo(route)}
+
+                Routes.NEWCARISTES -> CreateCariste(database){ route -> router.navigateTo(route)}
+                Routes.CREATEALLEE -> CreateAllee(database){ route -> router.navigateTo(route)}
+                Routes.CREATECOLL -> CreateCollonne(database){ route -> router.navigateTo(route)}
+                Routes.CREATEETAGE -> CreateEtage(database){ route -> router.navigateTo(route)}
+                Routes.CREATECOLIS -> CreateColis(database){ route -> router.navigateTo(route)}
+//                Routes.RECHERCHE -> RechercheColis(database, onRecherche = ){ route -> router.navigateTo(route)}
+                Routes.COLIS -> InfoColis(database,currentSelectedID){ route -> router.navigateTo(route)}
 
             }
 
