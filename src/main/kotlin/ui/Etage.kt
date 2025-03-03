@@ -33,7 +33,7 @@ import java.sql.DriverManager
 
 
 @Composable
-fun etageScreen(database : Database,ColonneSelectione : Int , onNavigate:(Routes)->Unit) {
+fun etageScreen(database : Database,ColonneSelectione : Int ,onRechercheEmplacement:(Int)->Unit , onNavigate:(Routes)->Unit) {
     val etages = requestetage(ColonneSelectione)
     Card(
         modifier = Modifier.fillMaxWidth().padding(16.dp), elevation = 4.dp
@@ -48,7 +48,6 @@ fun etageScreen(database : Database,ColonneSelectione : Int , onNavigate:(Routes
             ) {
                 Text("Retour")
             }
-            Text("Choisir un etage :")
 
             Button(
                 onClick = {
@@ -58,14 +57,14 @@ fun etageScreen(database : Database,ColonneSelectione : Int , onNavigate:(Routes
             ) {
                 Text("Créer un nouveau etage")
             }
-
+            Text("Choisir un etage :")
             etages.forEach { etage ->
                 Row {
 
                     Button(
                         onClick = {
-                            onNavigate(Routes.EMPLACEMENT)
-
+                            onRechercheEmplacement(etage.ID_Etage)
+//                            onNavigate(Routes.EMPLACEMENT)
                         },
                         modifier = Modifier.padding(vertical = 8.dp)
                     ) {
@@ -98,7 +97,7 @@ fun requestetage(ColonneSelectione : Int ): List<etages> {
     try {
         Class.forName("com.mysql.cj.jdbc.Driver")
         DriverManager.getConnection(url, user, password).use { connection ->
-            val query = "SELECT * FROM `etage` WHERE ID_Etage = '"+ColonneSelectione+"'"
+            val query = "SELECT * FROM `etage` WHERE  ID_Colonne = '"+ColonneSelectione+"'"
             connection.createStatement().use { statement ->
                 val resultSet = statement.executeQuery(query)
                 while (resultSet.next()) {

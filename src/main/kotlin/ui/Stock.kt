@@ -27,8 +27,7 @@ import java.sql.DriverManager
 
 
 @Composable
-fun StockScreen(database : Database,AlleeSelectione : Int , onNavigate:(Routes)->Unit) {
-    val allees = listOf("1", "2", "3", "4", "5")
+fun StockScreen(database : Database,AlleeSelectione : Int ,onRechercheColis:(Int)->Unit, onNavigate:(Routes)->Unit) {
     var Selection = AlleeSelectione
     var Stocks = request(Selection)
 
@@ -45,88 +44,88 @@ fun StockScreen(database : Database,AlleeSelectione : Int , onNavigate:(Routes)-
             ) {
                 Text("Retour")
             }
-            Row {
-            allees.forEach { allee ->
-                Button(
-                    onClick = {
-                        Selection = allee.toInt()
-
-                        Stocks = request(Selection)
-
-                        println(Stocks)
-                    },
-                    modifier = Modifier.padding(vertical = 8.dp)
-                ) {
-                    Text(allee)
-                }
-            }
-        }
-
-
+            Text("Voicie les colis de l'emplacement selectionne : ")
 
             // Table Header
             Row {
-                Text("NumeroCol", modifier = Modifier.weight(1f))
-                Text("Longueur", modifier = Modifier.weight(2f))
-                Text("Largeur", modifier = Modifier.weight(3f))
-                Text("Action", modifier = Modifier.weight(4f))
+                Text("Id_Colis", modifier = Modifier.padding(vertical = 8.dp).weight(1f))
+                Text("Longueur", modifier = Modifier.padding(vertical = 8.dp).weight(2f))
+                Text("Largeur", modifier = Modifier.padding(vertical = 8.dp).weight(3f))
+                Text("Hauteur", modifier = Modifier.padding(vertical = 8.dp).weight(4f))
+                Text("Poids", modifier = Modifier.padding(vertical = 8.dp).weight(5f))
 
             }
             // Table Rows
             Stocks.forEach { Stock ->
-                var NumeroCol by remember { mutableStateOf(Stock.NumeroCol.toString()) }
+                var ID_Colis by remember { mutableStateOf(Stock.ID_Colis) }
                 var Longueur by remember { mutableStateOf((Stock.Longueur.toString())) }
                 var Largeur by remember { mutableStateOf(Stock.Largeur.toString())}
+                var Hauteur by remember { mutableStateOf(Stock.Hauteur.toString())}
+                var Poids by remember { mutableStateOf(Stock.Poids.toString())}
 
                 Row {
-                    Text(Stock.NumeroCol.toString(), modifier = Modifier.weight(1f))
-
-                    OutlinedTextField(
-                        value = Longueur,
-                        onValueChange = { newValue ->
-                            // Vous pouvez ajouter une validation ici si nécessaire
-                            Longueur = newValue
-                            // Pour mettre à jour la valeur dans votre modèle:
-                            // Convertir en Int avec gestion d'erreur
-                            newValue.toIntOrNull()?.let { numCol ->
-                                Longueur = numCol.toString()
-                            }
-                        },
-                        label = { Text("Longueur") },
-                        modifier = Modifier.weight(2f),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-                    )
-
-                    OutlinedTextField(
-                        value = Largeur,
-                        onValueChange = { newValue ->
-                            // Vous pouvez ajouter une validation ici si nécessaire
-                            Largeur = newValue
-                            // Pour mettre à jour la valeur dans votre modèle:
-                            // Convertir en Int avec gestion d'erreur
-                            newValue.toIntOrNull()?.let { numCol ->
-                                Largeur = numCol.toString()
-                            }
-                        },
-                        label = { Text("Largeur") },
-                        modifier = Modifier.weight(3f),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-                    )
-
                     Button(
                         onClick = {
-                            val updatedStocks = Stock(
-                                NumeroCol = NumeroCol.toInt(),
-                                Longueur = Longueur.toInt(),
-                                Largeur = Largeur.toInt()
-                            )
-                            sendData(database, updatedStocks)
-                                  },
-
-                        modifier = Modifier.weight(4f).padding(vertical = 8.dp)
+                            onRechercheColis(ID_Colis)
+//                            onNavigate(Routes.EMPLACEMENT)
+                        },
+                        modifier = Modifier.padding(vertical = 8.dp).weight(1f)
                     ) {
-                        Text("Modifier")
+                        Text(ID_Colis.toString())
                     }
+
+                    Text(Longueur, modifier = Modifier.padding(vertical = 8.dp).weight(2f))
+                    Text(Largeur, modifier = Modifier.padding(vertical = 8.dp).weight(3f))
+                    Text(Hauteur, modifier = Modifier.padding(vertical = 8.dp).weight(4f))
+                    Text(Poids, modifier = Modifier.padding(vertical = 8.dp).weight(5f))
+
+
+//                    OutlinedTextField(
+//                        value = Longueur,
+//                        onValueChange = { newValue ->
+//                            // Vous pouvez ajouter une validation ici si nécessaire
+//                            Longueur = newValue
+//                            // Pour mettre à jour la valeur dans votre modèle:
+//                            // Convertir en Int avec gestion d'erreur
+//                            newValue.toIntOrNull()?.let { numCol ->
+//                                Longueur = numCol.toString()
+//                            }
+//                        },
+//                        label = { Text("Longueur") },
+//                        modifier = Modifier.weight(2f),
+//                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+//                    )
+//
+//                    OutlinedTextField(
+//                        value = Largeur,
+//                        onValueChange = { newValue ->
+//                            // Vous pouvez ajouter une validation ici si nécessaire
+//                            Largeur = newValue
+//                            // Pour mettre à jour la valeur dans votre modèle:
+//                            // Convertir en Int avec gestion d'erreur
+//                            newValue.toIntOrNull()?.let { numCol ->
+//                                Largeur = numCol.toString()
+//                            }
+//                        },
+//                        label = { Text("Largeur") },
+//                        modifier = Modifier.weight(3f),
+//                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+//                    )
+
+//                    Button(
+//                        onClick = {
+//                            val updatedStocks = Stock(
+//                                ID_Colis = NumeroCol.toInt(),
+//                                Longueur = Longueur.toInt(),
+//                                Largeur = Largeur.toInt()
+//                            )
+//                            sendData(database, updatedStocks)
+//                                  },
+//
+//                        modifier = Modifier.weight(4f).padding(vertical = 8.dp)
+//                    ) {
+//                        Text("Modifier")
+//                    }
                 }
             }
         }
@@ -145,7 +144,7 @@ fun request(AlleeSelectione: Int ): List<Stock> {
         Class.forName("com.mysql.cj.jdbc.Driver")
         DriverManager.getConnection(url, user, password).use { connection ->
             val query = "select * from colis \n" +
-                    "join place on colis.ID_Colis = place.ID_Emplacement \n" +
+                    "join place on colis.ID_Colis = place.ID_Colis \n" +
                     "join emplacement on place.ID_Emplacement = emplacement.ID_Emplacement \n" +
                     "join etage on etage.ID_Etage = emplacement.ID_Etage\n" +
                     "join colonne on etage.ID_Colonne = colonne.ID_Colonne \n" +
@@ -156,9 +155,11 @@ fun request(AlleeSelectione: Int ): List<Stock> {
                 while (resultSet.next()) {
                     Stocks.add(
                         Stock(
-                            NumeroCol = resultSet.getInt("colonne.NumeroCol"),
+                            ID_Colis = resultSet.getInt("colis.ID_Colis"),
                             Longueur = resultSet.getInt("colis.Longueur"),
-                            Largeur = resultSet.getInt("colis.Largeur")
+                            Largeur = resultSet.getInt("colis.Largeur"),
+                            Hauteur = resultSet.getInt("colis.Hauteur"),
+                            Poids = resultSet.getInt("colis.Poids")
                         )
                     )
                 }
@@ -167,31 +168,35 @@ fun request(AlleeSelectione: Int ): List<Stock> {
     } catch (e: Exception) {
         e.printStackTrace()
     }
+    println("Stocks trouve : "+Stocks)
     return Stocks
 }
 
 data class Stock(
-    val NumeroCol: Int,
+    val ID_Colis: Int,
     val Longueur: Int,
-    val Largeur: Int
+    val Largeur: Int,
+    val Hauteur: Int,
+    val Poids: Int,
+
 )
 
-fun sendData(database : Database, stock : Stock): String {
-
-    try {
-
-        println("update cariste"+ stock)
-        database.update(Caristes) {
-            set(colis.Largeur, stock.Largeur)
-            set(colis.Longueur, stock.Longueur)
-            where {
-                Caristes.ID_cariste eq stock.NumeroCol
-            }
-        }
-
-    } catch (e: Exception) {
-        e.printStackTrace()
-    }
-    return "done"
-}
+//fun sendData(database : Database, stock : Stock): String {
+//
+//    try {
+//
+//        println("update cariste"+ stock)
+//        database.update(Caristes) {
+//            set(colis.Largeur, stock.Largeur)
+//            set(colis.Longueur, stock.Longueur)
+//            where {
+//                Caristes.ID_cariste eq stock.ID_Colis
+//            }
+//        }
+//
+//    } catch (e: Exception) {
+//        e.printStackTrace()
+//    }
+//    return "done"
+//}
 

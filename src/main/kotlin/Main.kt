@@ -40,24 +40,53 @@ fun App(database: Database) {
                         currentSelectedID = ID1
                 },{route -> router.navigateTo(route)})
 
+                Routes.ALLEE -> AlleeScreen(database,{ ID_Allee ->
+                    println("recherche de Collone avec : "+ID_Allee)
+                        router.navigateTo(route = Routes.COLONNE)
+                        currentSelectedID = ID_Allee
+                },{route -> router.navigateTo(route)})
 
+                Routes.COLONNE -> colonneScreen(database,currentSelectedID,{ ID_colonne ->
+                    println("recherche de ETAGE avec : "+ID_colonne)
+                        router.navigateTo(route = Routes.ETAGE)
+                        currentSelectedID = ID_colonne
+                },{route -> router.navigateTo(route)})
+
+                Routes.ETAGE -> etageScreen(database,currentSelectedID,{ ID_Etage ->
+                    println("recherche de Emplacement avec : "+ID_Etage)
+                        router.navigateTo(route = Routes.EMPLACEMENT)
+                        currentSelectedID = ID_Etage
+                },{route -> router.navigateTo(route)})
+
+                Routes.EMPLACEMENT -> EmplacementScreen(database,currentSelectedID,{ ID_Emplacement ->
+                    println("recherche de Emplacement avec : "+ID_Emplacement)
+                        router.navigateTo(route = Routes.STOCK)
+                        currentSelectedID = ID_Emplacement
+                },{route -> router.navigateTo(route)})
+
+                Routes.STOCK -> StockScreen(database,currentSelectedID,{ ID_Colis ->
+                    println("recherche de Emplacement avec : "+ID_Colis)
+                        router.navigateTo(route = Routes.COLIS)
+                        currentSelectedID = ID_Colis
+                },{route -> router.navigateTo(route)})
+
+
+
+//                Routes.STOCK -> StockScreen(database,currentSelectedID){ route -> router.navigateTo(route)}
+
+//                Routes.ETAGE -> etageScreen(database,currentSelectedID){ route -> router.navigateTo(route)}
+
+//                Routes.COLONNE -> colonneScreen(database,currentSelectedID){ route -> router.navigateTo(route)}
 
                 Routes.HOME -> HomeScreen{route -> router.navigateTo(route)}
-
-                Routes.STOCK -> StockScreen(database,1){ route -> router.navigateTo(route)}
                 Routes.CARISTES -> CaristesScreen(database){ route -> router.navigateTo(route)}
-                Routes.ALLEE -> AlleeScreen(database){ route -> router.navigateTo(route)}
-                Routes.COLONNE -> colonneScreen(database,1){ route -> router.navigateTo(route)}
-                Routes.EMPLACEMENT -> EmplacementScreen(database,1){ route -> router.navigateTo(route)}
-                Routes.ETAGE -> etageScreen(database,1){ route -> router.navigateTo(route)}
-
                 Routes.NEWCARISTES -> CreateCariste(database){ route -> router.navigateTo(route)}
                 Routes.CREATEALLEE -> CreateAllee(database){ route -> router.navigateTo(route)}
                 Routes.CREATECOLL -> CreateCollonne(database){ route -> router.navigateTo(route)}
                 Routes.CREATEETAGE -> CreateEtage(database){ route -> router.navigateTo(route)}
                 Routes.CREATECOLIS -> CreateColis(database){ route -> router.navigateTo(route)}
-//                Routes.RECHERCHE -> RechercheColis(database, onRecherche = ){ route -> router.navigateTo(route)}
                 Routes.COLIS -> InfoColis(database,currentSelectedID){ route -> router.navigateTo(route)}
+
 
             }
 

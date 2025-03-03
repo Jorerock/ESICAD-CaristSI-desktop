@@ -32,7 +32,7 @@ import java.sql.DriverManager
 
 
 @Composable
-fun EmplacementScreen(database : Database,ColonneSelectione : Int , onNavigate:(Routes)->Unit) {
+fun EmplacementScreen(database : Database,ColonneSelectione : Int ,onRechercheStock:(Int)->Unit, onNavigate:(Routes)->Unit) {
     val emplacements = requestemplacement(ColonneSelectione)
     Card(
         modifier = Modifier.fillMaxWidth().padding(16.dp), elevation = 4.dp
@@ -41,13 +41,13 @@ fun EmplacementScreen(database : Database,ColonneSelectione : Int , onNavigate:(
         Column {
             Button(
                 onClick = {
-                    onNavigate(Routes.HOME)
+                    onNavigate(Routes.ETAGE)
                 },
                 modifier = Modifier.padding(vertical = 8.dp)
             ) {
                 Text("Retour")
             }
-            Text("Choisir une emplacement :")
+            Text("Emplacement de la Colonne: "+ ColonneSelectione)
 
             Row {
                 Text("VolumeMax", modifier = Modifier.weight(2f))
@@ -96,7 +96,8 @@ fun EmplacementScreen(database : Database,ColonneSelectione : Int , onNavigate:(
                 Row {
                     Button(
                         onClick = {
-                            onNavigate(Routes.STOCK)
+                            onRechercheStock(emplacement.ID_Emplacement)
+//                            onNavigate(Routes.STOCK)
                         },
                         modifier = Modifier.weight(5f).padding(vertical = 8.dp)
                     ) {

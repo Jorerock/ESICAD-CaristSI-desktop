@@ -29,7 +29,7 @@ import java.sql.DriverManager
 
 
 @Composable
-fun AlleeScreen(database : Database, onNavigate:(Routes)->Unit) {
+fun AlleeScreen(database : Database,onRechercheColl:(Int)->Unit, onNavigate:(Routes)->Unit) {
     val allees = requestAllee()
     Card(
         modifier = Modifier.fillMaxWidth().padding(16.dp), elevation = 4.dp
@@ -61,7 +61,8 @@ fun AlleeScreen(database : Database, onNavigate:(Routes)->Unit) {
 
                         Button(
                             onClick = {
-                                onNavigate(Routes.COLONNE)
+                                onRechercheColl(allee.ID_Allee)
+//                                onNavigate(Routes.COLONNE)
                             },
                             modifier = Modifier.weight(1f).padding(vertical = 8.dp)
                         ) {

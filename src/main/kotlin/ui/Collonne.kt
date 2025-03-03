@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import ktorm.Caristes
+import ktorm.colonne
 
 import org.ktorm.database.Database
 import org.ktorm.dsl.*
@@ -30,7 +31,7 @@ import java.sql.DriverManager
 
 
 @Composable
-fun colonneScreen(database : Database,AlleeSelectione : Int , onNavigate:(Routes)->Unit) {
+fun colonneScreen(database : Database, AlleeSelectione : Int ,onRechercheEtage:(Int)->Unit ,onNavigate:(Routes)->Unit) {
     val Colonnes = requestColonne(AlleeSelectione)
     Card(
         modifier = Modifier.fillMaxWidth().padding(16.dp), elevation = 4.dp
@@ -39,7 +40,7 @@ fun colonneScreen(database : Database,AlleeSelectione : Int , onNavigate:(Routes
         Column {
             Button(
                 onClick = {
-                    onNavigate(Routes.HOME)
+                    onNavigate(Routes.ALLEE)
                 },
                 modifier = Modifier.padding(vertical = 8.dp)
             ) {
@@ -62,11 +63,13 @@ fun colonneScreen(database : Database,AlleeSelectione : Int , onNavigate:(Routes
                 Row {
                     Button(
                         onClick = {
-                            onNavigate(Routes.ETAGE)
+                            onRechercheEtage(Colonne.ID_colonne)
+
+//                            onNavigate(Routes.ETAGE)
                         },
                         modifier = Modifier.padding(vertical = 8.dp)
                     ) {
-                        Text(Colonne.ID_colonne.toString())
+                        Text(Colonne.NumeroCol.toString())
                     }
 
                     Button(
