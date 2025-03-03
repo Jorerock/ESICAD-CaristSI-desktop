@@ -95,7 +95,6 @@ fun requestColonne(AlleeSelectione : Int ): List<Collonne> {
     val user = "root"
     val password = ""
 
-
     try {
         Class.forName("com.mysql.cj.jdbc.Driver")
         DriverManager.getConnection(url, user, password).use { connection ->

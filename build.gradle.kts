@@ -1,5 +1,5 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-
+var koin_version = "4.0.2"
 plugins {
     kotlin("jvm")
     id("org.jetbrains.compose")
@@ -24,8 +24,13 @@ dependencies {
     implementation("org.ktorm:ktorm-core:4.1.1")
     implementation("org.ktorm:ktorm-support-mysql:3.6.0")
     implementation("com.mysql:mysql-connector-j:8.3.0")
-
-}
+    implementation("org.jetbrains.compose.material:material:1.5.0")
+    implementation(project.dependencies.platform("io.insert-koin:koin-bom:$koin_version"))
+    implementation("io.insert-koin:koin-core")
+    implementation("io.insert-koin:koin-compose:$koin_version")
+    implementation("io.insert-koin:koin-compose-viewmodel:$koin_version")
+    implementation("io.insert-koin:koin-compose-viewmodel-navigation:$koin_version")
+     }
 
 compose.desktop {
     application {

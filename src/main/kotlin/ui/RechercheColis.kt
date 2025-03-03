@@ -1,31 +1,18 @@
 package ui
-import androidx.compose.desktop.ui.tooling.preview.Preview
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import ui.LoginScreen
-import routing.Router
 import routing.Routes
-import ui.HomeScreen
-import ui.LoginScreen
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
-import ktorm.Caristes
 import ktorm.colis
-import ktorm.colis.primaryKey
-import org.ktorm.database.Database
-import org.ktorm.dsl.*
-import org.ktorm.schema.date
-import org.ktorm.schema.int
-
-import java.sql.DriverManager
 
 
 

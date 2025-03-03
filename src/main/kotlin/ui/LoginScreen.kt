@@ -30,6 +30,7 @@ fun LoginScreen(onLogin: (String, String) -> Unit) {
 
         OutlinedTextField(
             value = email,
+            singleLine = true,
             onValueChange = { email = it },
             label = { Text("Email") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
@@ -38,6 +39,7 @@ fun LoginScreen(onLogin: (String, String) -> Unit) {
 
         OutlinedTextField(
             value = password,
+            singleLine = true,
             onValueChange = { password = it },
             label = { Text("Mot de passe") },
             visualTransformation = PasswordVisualTransformation(),

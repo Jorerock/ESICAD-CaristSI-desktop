@@ -30,7 +30,7 @@ import org.ktorm.schema.varchar
 
 
 import java.sql.DriverManager
-
+import java.time.LocalDate
 
 
 @Composable
@@ -49,12 +49,14 @@ fun CreateCariste(database : Database, onNavigate:(Routes)->Unit) {
     Card(
         modifier = Modifier.fillMaxWidth().padding(16.dp), elevation = 4.dp
     ){
-        var Alee  = 1
+        var Alee  = LocalDate.now()
 
         Column(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
+
+            //SimpleDatePicker(LocalDate.now(),Alee)
             Button(
                 onClick = {
                     onNavigate(Routes.CARISTES)
@@ -118,6 +120,8 @@ fun CreateCariste(database : Database, onNavigate:(Routes)->Unit) {
                         Text("Cree l'utilisateur`")
 
                     }
+
+
         }
     }
 }

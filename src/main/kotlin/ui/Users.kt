@@ -21,6 +21,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import ktorm.Caristes
 import org.ktorm.database.Database
 import org.ktorm.dsl.*
+import java.sql.Date
 
 
 import java.sql.DriverManager
@@ -61,13 +62,22 @@ fun CaristesScreen(database : Database, onNavigate:(Routes)->Unit) {
                 Text("id", modifier = Modifier.weight(1f))
                 Text("Nom", modifier = Modifier.weight(2f))
                 Text("Prenom", modifier = Modifier.weight(3f))
+//                Text("Login", modifier = Modifier.weight(4f))
+//                Text("Embauche", modifier = Modifier.weight(6f))
+//                Text("Mot de Passe", modifier = Modifier.weight(5f))
+//                Text("Naissance", modifier = Modifier.weight(7f))
                 Text("Action", modifier = Modifier.weight(4f))
+
 
             }
             // Table Rows
             caristes.forEach { user ->
                 var Caristenom by remember { mutableStateOf(TextFieldValue(user.nom)) }
                 var CaristePrenom by remember { mutableStateOf(TextFieldValue(user.prenom)) }
+//                var Login by remember { mutableStateOf(TextFieldValue(user.Login)) }
+//                var MDP by remember { mutableStateOf(TextFieldValue(user.MDP)) }
+//                var Naissance by remember { mutableStateOf(TextFieldValue(user.Naissance)) }
+//                var Embauche by remember { mutableStateOf(TextFieldValue(user.Embauche)) }
                 var isEditMode by remember { mutableStateOf(false) }
 
                 Row {
@@ -141,7 +151,14 @@ data class Cariste(
     val ID_Cariste: Int,
     val nom: String,
     val prenom: String
+//    val Naissance: Date
+//    val Embauche: Date
+//    val MDP: String
+//    val Login: String
 )
+
+
+
 
 fun UpdateUser(database : Database, cariste : Cariste): String {
 

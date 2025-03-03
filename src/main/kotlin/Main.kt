@@ -3,7 +3,9 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.window.Window
+//import androidx.compose.ui.window
+import androidx.compose.ui.window.*
+import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.application
 import ktorm.Caristes
 import org.ktorm.database.Database
@@ -13,10 +15,12 @@ import routing.Router
 import routing.Routes
 import ui.*
 
+
 @Composable
 @Preview
 fun App(database: Database) {
     val router = remember { Router() }
+    val ID_cariste : Int = remember {0 }
     var currentSelectedID = 1
     MaterialTheme {
         Surface {
@@ -98,7 +102,7 @@ fun App(database: Database) {
 
 fun main() = application {
 
-    val database = Database.connect(
+        val database = Database.connect(
         url = "jdbc:mysql://localhost:3306/carist-si",
         user = "root",
         password = null
@@ -113,7 +117,12 @@ fun main() = application {
         }
     }
 
-    Window(onCloseRequest = ::exitApplication) {
+    Window(onCloseRequest = ::exitApplication,
+        title = "Carist-SI",
+        state = WindowState(placement = WindowPlacement.Maximized)
+        ) {
         App(database)
+
+
     }
 }
