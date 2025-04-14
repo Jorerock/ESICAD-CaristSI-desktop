@@ -11,6 +11,7 @@ import routing.Router
 import routing.Routes
 import ui.HomeScreen
 import ui.LoginScreen
+
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.getValue
@@ -45,6 +46,7 @@ fun StockScreen(database : Database,AlleeSelectione : Int ,onRechercheColis:(Int
                 Text("Retour")
             }
             Text("Voicie les colis de l'emplacement selectionne : ")
+
 
             // Table Header
             Row {

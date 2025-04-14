@@ -30,6 +30,7 @@ dependencies {
     implementation("io.insert-koin:koin-compose:$koin_version")
     implementation("io.insert-koin:koin-compose-viewmodel:$koin_version")
     implementation("io.insert-koin:koin-compose-viewmodel-navigation:$koin_version")
+    implementation("mysql:mysql-connector-java:8.0.26")
      }
 
 compose.desktop {
