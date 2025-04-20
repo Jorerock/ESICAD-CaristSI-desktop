@@ -1,67 +1,86 @@
 package ui
 
-import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardOptions
+
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import ui.Element.FeedbackMessage
+import ui.Element.OperationState
+import ui.Element.*
 
 @Composable
-@Preview
-fun LoginScreen(onLogin: (String, String) -> Unit) {
-    var email by remember { mutableStateOf(TextFieldValue("")) }
-    var password by remember { mutableStateOf(TextFieldValue("")) }
-    var errorMessage by remember { mutableStateOf<String?>(null) }
+fun LoginScreen(onLoginRequested: (String, String, (OperationState<Unit>) -> Unit) -> Unit) {
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var loginState by remember { mutableStateOf<OperationState<Unit>>(OperationState.Initial) }
 
     Column(
-        modifier = Modifier.padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+        modifier = Modifier.fillMaxSize().padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        Text("Connexion", fontSize = 24.sp)
+        Text(
+            text = "Connexion",
+            style = MaterialTheme.typography.h4,
+            color = textPrimaryColor
+        )
+
+        Spacer(modifier = Modifier.height(32.dp))
 
         OutlinedTextField(
             value = email,
-            singleLine = true,
             onValueChange = { email = it },
             label = { Text("Email") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-            modifier = Modifier.fillMaxWidth()
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth(0.8f)
         )
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
             value = password,
-            singleLine = true,
             onValueChange = { password = it },
             label = { Text("Mot de passe") },
             visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            modifier = Modifier.fillMaxWidth()
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth(0.8f)
         )
 
-        errorMessage?.let {
-            Text(it, color = MaterialTheme.colors.error)
-        }
+        Spacer(modifier = Modifier.height(24.dp))
 
         Button(
             onClick = {
-                if (email.text.isNotEmpty() && password.text.isNotEmpty()) {
-                    onLogin(email.text, password.text)
+                if (email.isNotBlank() && password.isNotBlank()) {
+                    loginState = OperationState.Loading
+                    onLoginRequested(email, password) { newState ->
+                        loginState = newState
+                    }
                 } else {
-                    errorMessage = "Veuillez remplir tous les champs"
+                    loginState = OperationState.Error("Email et mot de passe requis")
                 }
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(0.8f),
+            colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor)
         ) {
-            Text("Se connecter")
+            Text("Se connecter", color = Color.White)
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        when (val state = loginState) {
+            is OperationState.Error -> {
+                FeedbackMessage(message = state.message, isError = true)
+            }
+            is OperationState.Loading -> {
+                CircularProgressIndicator()
+            }
+            else -> { /* Ne rien afficher pour les autres états */ }
         }
     }
 }
