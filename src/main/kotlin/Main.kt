@@ -147,157 +147,175 @@ fun App() {
                     }
                 }
 
+                // Modifiez votre main.kt pour afficher InfoColis conditionnellement :
+
+// Modifiez votre main.kt pour afficher InfoColis conditionnellement :
+
                 Routes.RECHERCHE -> {
                     var searchState by remember { mutableStateOf<OperationState<Int>>(OperationState.Initial) }
+                    var colisSelectionne by remember { mutableStateOf<Int?>(null) }
 
                     Column {
-                        RechercheColis(
-                            { id ->
-                                try {
-                                    println("recherche de ID_Colis $id")
-                                    // Vérifier que l'ID existe dans la base de données
-                                    val exists = database.from(colis)
-                                        .select()
-                                        .where { colis.ID eq id }
-                                        .totalRecords > 0
-
-                                    if (exists) {
-                                        currentSelectedID = id
-                                        searchState = OperationState.Success(id)
-                                        router.navigateTo(Routes.COLIS)
-                                    } else {
-                                        searchState = OperationState.Error("Colis avec ID $id non trouvé")
-                                    }
-                                } catch (e: Exception) {
-                                    searchState = OperationState.Error("Erreur lors de la recherche: ${e.localizedMessage ?: "Erreur inconnue"}")
-                                    println("Erreur lors de la recherche: ${e.message}")
+                        // Si un colis est sélectionné, affichez ses informations
+                        if (colisSelectionne != null) {
+                            InfoColis(database, colisSelectionne!!) { route ->
+                                // En cas de retour, réinitialisez colisSelectionne à null
+                                if (route == Routes.RECHERCHE) {
+                                    colisSelectionne = null
+                                } else {
+                                    router.navigateTo(route)
                                 }
-                            },
-                            { route -> router.navigateTo(route) }
-                        )
+                            }
+                        } else {
+                            // Sinon, affichez l'écran de recherche
+                            RechercheColis(
+                                { id ->
+                                    try {
+                                        println("recherche de ID_Colis $id")
+                                        // Vérifier que l'ID existe dans la base de données
+                                        val exists = database.from(colis)
+                                            .select()
+                                            .where { colis.ID eq id }
+                                            .totalRecords > 0
 
-                        when (val state = searchState) {
-                            is OperationState.Error -> {
-                                FeedbackMessage(message = state.message, isError = true)
+                                        if (exists) {
+                                            currentSelectedID = id
+                                            colisSelectionne = id  // Définir le colis sélectionné au lieu de naviguer
+                                            searchState = OperationState.Success(id)
+                                        } else {
+                                            searchState = OperationState.Error("Colis avec ID $id non trouvé")
+                                        }
+                                    } catch (e: Exception) {
+                                        searchState = OperationState.Error("Erreur lors de la recherche: ${e.localizedMessage ?: "Erreur inconnue"}")
+                                        println("Erreur lors de la recherche: ${e.message}")
+                                    }
+                                },
+                                { route -> router.navigateTo(route) }
+                            )
+
+                            when (val state = searchState) {
+                                is OperationState.Error -> {
+                                    FeedbackMessage(message = state.message, isError = true)
+                                }
+                                is OperationState.Success -> {
+                                    FeedbackMessage(message = "Colis trouvé avec succès", isError = false)
+                                }
+                                is OperationState.Loading -> {
+                                    CircularProgressIndicator()
+                                }
+                                else -> { /* Ne rien afficher pour les autres états */ }
                             }
-                            is OperationState.Success -> {
-                                FeedbackMessage(message = "Colis trouvé avec succès", isError = false)
-                            }
-                            is OperationState.Loading -> {
-                                CircularProgressIndicator()
-                            }
-                            else -> { /* Ne rien afficher pour les autres états */ }
                         }
                     }
                 }
 
-                Routes.ALLEE -> {
-                    var alleeState by remember { mutableStateOf<OperationState<Int>>(OperationState.Initial) }
+//                Routes.ALLEE -> {
+//                    var alleeState by remember { mutableStateOf<OperationState<Int>>(OperationState.Initial) }
+//
+//                    Column {
+//                        AlleeScreen(
+//                            database,
+//                            { id ->
+//                                try {
+//                                    println("recherche de Colonne avec : $id")
+//                                    val exists = database.from(colonne)
+//                                        .select()
+//                                        .where { colonne.ID_colonne eq id }
+//                                        .totalRecordsInAllPages > 0
+//
+//                                    if (exists) {
+//                                        currentSelectedID = id
+//                                        alleeState = OperationState.Success(id)
+//                                        router.navigateTo(Routes.COLONNE)
+//                                    } else {
+//                                        alleeState = OperationState.Error("Aucune colonne trouvée pour l'allée $id")
+//                                    }
+//                                } catch (e: Exception) {
+//                                    alleeState = OperationState.Error("Erreur lors de la recherche: ${e.localizedMessage ?: "Erreur inconnue"}")
+//                                    println("Erreur de recherche d'allée: ${e.message}")
+//                                }
+//                            },
+//                            { route -> router.navigateTo(route) }
+//                        )
+//
+//                        when (val state = alleeState) {
+//                            is OperationState.Error -> {
+//                                FeedbackMessage(message = state.message, isError = true)
+//                            }
+//                            is OperationState.Success -> {
+//                                FeedbackMessage(message = "Colonnes trouvées avec succès", isError = false)
+//                            }
+//                            is OperationState.Loading -> {
+//                                CircularProgressIndicator()
+//                            }
+//                            else -> { /* Ne rien afficher pour les autres états */ }
+//                        }
+//                    }
+//                }
 
-                    Column {
-                        AlleeScreen(
-                            database,
-                            { id ->
-                                try {
-                                    println("recherche de Colonne avec : $id")
-                                    val exists = database.from(colonne)
-                                        .select()
-                                        .where { colonne.ID_colonne eq id }
-                                        .totalRecordsInAllPages > 0
+//                Routes.COLONNE -> colonneScreen(
+//                    database,
+//                    currentSelectedID,
+//                    { id ->
+//                        try {
+//                            println("recherche de ETAGE avec : $id")
+//                            currentSelectedID = id
+//                            router.navigateTo(Routes.ETAGE)
+//                        } catch (e: Exception) {
+//                            println("Erreur lors de la recherche d'étage: ${e.message}")
+//                            // Afficher un message d'erreur à l'utilisateur
+//                        }
+//                    },
+//                    { route -> router.navigateTo(route) }
+//                )
 
-                                    if (exists) {
-                                        currentSelectedID = id
-                                        alleeState = OperationState.Success(id)
-                                        router.navigateTo(Routes.COLONNE)
-                                    } else {
-                                        alleeState = OperationState.Error("Aucune colonne trouvée pour l'allée $id")
-                                    }
-                                } catch (e: Exception) {
-                                    alleeState = OperationState.Error("Erreur lors de la recherche: ${e.localizedMessage ?: "Erreur inconnue"}")
-                                    println("Erreur de recherche d'allée: ${e.message}")
-                                }
-                            },
-                            { route -> router.navigateTo(route) }
-                        )
+//                Routes.ETAGE -> etageScreen(
+//                    database,
+//                    currentSelectedID,
+//                    { id ->
+//                        try {
+//                            println("recherche de Emplacement avec : $id")
+//                            currentSelectedID = id
+//                            router.navigateTo(Routes.EMPLACEMENT)
+//                        } catch (e: Exception) {
+//                            println("Erreur lors de la recherche d'emplacement: ${e.message}")
+//                            // Afficher un message d'erreur à l'utilisateur
+//                        }
+//                    },
+//                    { route -> router.navigateTo(route) }
+//                )
 
-                        when (val state = alleeState) {
-                            is OperationState.Error -> {
-                                FeedbackMessage(message = state.message, isError = true)
-                            }
-                            is OperationState.Success -> {
-                                FeedbackMessage(message = "Colonnes trouvées avec succès", isError = false)
-                            }
-                            is OperationState.Loading -> {
-                                CircularProgressIndicator()
-                            }
-                            else -> { /* Ne rien afficher pour les autres états */ }
-                        }
-                    }
-                }
+//                Routes.EMPLACEMENT -> EmplacementScreen(
+//                    database,
+//                    currentSelectedID,
+//                    { id ->
+//                        try {
+//                            println("recherche de Stock avec : $id")
+//                            currentSelectedID = id
+//                            router.navigateTo(Routes.STOCK)
+//                        } catch (e: Exception) {
+//                            println("Erreur lors de la recherche de stock: ${e.message}")
+//                            // Afficher un message d'erreur à l'utilisateur
+//                        }
+//                    },
+//                    { route -> router.navigateTo(route) }
+//                )
 
-                Routes.COLONNE -> colonneScreen(
-                    database,
-                    currentSelectedID,
-                    { id ->
-                        try {
-                            println("recherche de ETAGE avec : $id")
-                            currentSelectedID = id
-                            router.navigateTo(Routes.ETAGE)
-                        } catch (e: Exception) {
-                            println("Erreur lors de la recherche d'étage: ${e.message}")
-                            // Afficher un message d'erreur à l'utilisateur
-                        }
-                    },
-                    { route -> router.navigateTo(route) }
-                )
-
-                Routes.ETAGE -> etageScreen(
-                    database,
-                    currentSelectedID,
-                    { id ->
-                        try {
-                            println("recherche de Emplacement avec : $id")
-                            currentSelectedID = id
-                            router.navigateTo(Routes.EMPLACEMENT)
-                        } catch (e: Exception) {
-                            println("Erreur lors de la recherche d'emplacement: ${e.message}")
-                            // Afficher un message d'erreur à l'utilisateur
-                        }
-                    },
-                    { route -> router.navigateTo(route) }
-                )
-
-                Routes.EMPLACEMENT -> EmplacementScreen(
-                    database,
-                    currentSelectedID,
-                    { id ->
-                        try {
-                            println("recherche de Stock avec : $id")
-                            currentSelectedID = id
-                            router.navigateTo(Routes.STOCK)
-                        } catch (e: Exception) {
-                            println("Erreur lors de la recherche de stock: ${e.message}")
-                            // Afficher un message d'erreur à l'utilisateur
-                        }
-                    },
-                    { route -> router.navigateTo(route) }
-                )
-
-                Routes.STOCK -> StockScreen(
-                    database,
-                    currentSelectedID,
-                    { id ->
-                        try {
-                            println("recherche de Colis avec : $id")
-                            currentSelectedID = id
-                            router.navigateTo(Routes.COLIS)
-                        } catch (e: Exception) {
-                            println("Erreur lors de la recherche de colis: ${e.message}")
-                            // Afficher un message d'erreur à l'utilisateur
-                        }
-                    },
-                    { route -> router.navigateTo(route) }
-                )
+//                Routes.STOCK -> StockScreen(
+//                    database,
+//                    currentSelectedID,
+//                    { id ->
+//                        try {
+//                            println("recherche de Colis avec : $id")
+//                            currentSelectedID = id
+//                            router.navigateTo(Routes.COLIS)
+//                        } catch (e: Exception) {
+//                            println("Erreur lors de la recherche de colis: ${e.message}")
+//                            // Afficher un message d'erreur à l'utilisateur
+//                        }
+//                    },
+//                    { route -> router.navigateTo(route) }
+//                )
 
                 Routes.HOME -> HomeScreen { route -> router.navigateTo(route) }
 
@@ -309,49 +327,49 @@ fun App() {
                     router.navigateTo(route)
                 }
 
-                Routes.CREATEALLEE -> CreateAllee(database) { route ->
-                    router.navigateTo(route)
-                }
+//                Routes.CREATEALLEE -> CreateAllee(database) { route ->
+//                    router.navigateTo(route)
+//                }
 
-                Routes.CREATECOLL -> CreateCollonne(database) { route ->
-                    router.navigateTo(route)
-                }
+//                Routes.CREATECOLL -> CreateCollonne(database) { route ->
+//                    router.navigateTo(route)
+//                }
 
-                Routes.CREATEETAGE -> CreateEtage(database) { route ->
-                    router.navigateTo(route)
-                }
+//                Routes.CREATEETAGE -> CreateEtage(database) { route ->
+//                    router.navigateTo(route)
+//                }
 
                 Routes.CREATECOLIS -> CreateColis(database) { route ->
                     router.navigateTo(route)
                 }
 
-                Routes.COLIS -> InfoColis(
-                    database,
-                    currentSelectedID
-                ) { route ->
-                    router.navigateTo(route)
-                }
-                else -> {
-                    // Cas par défaut si une route non gérée est rencontrée
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = "Route non trouvée: ${router.currentRoute}",
-                            style = MaterialTheme.typography.h5,
-                            color = Color.Red
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Button(
-                            onClick = { router.navigateTo(Routes.HOME) },
-                            colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor)
-                        ) {
-                            Text("Retourner à l'accueil", color = Color.White)
-                        }
-                    }
-                }
+//                Routes.COLIS -> InfoColis(
+//                    database,
+//                    currentSelectedID
+//                ) { route ->
+//                    router.navigateTo(route)
+//                }
+//                else -> {
+//                    // Cas par défaut si une route non gérée est rencontrée
+//                    Column(
+//                        modifier = Modifier.fillMaxSize(),
+//                        horizontalAlignment = Alignment.CenterHorizontally,
+//                        verticalArrangement = Arrangement.Center
+//                    ) {
+//                        Text(
+//                            text = "Route non trouvée: ${router.currentRoute}",
+//                            style = MaterialTheme.typography.h5,
+//                            color = Color.Red
+//                        )
+//                        Spacer(modifier = Modifier.height(16.dp))
+//                        Button(
+//                            onClick = { router.navigateTo(Routes.HOME) },
+//                            colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor)
+//                        ) {
+//                            Text("Retourner à l'accueil", color = Color.White)
+//                        }
+//                    }
+//                }
             }
         }
     }

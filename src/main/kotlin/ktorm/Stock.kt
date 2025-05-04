@@ -1,17 +1,16 @@
-package ktorm
+//package ktorm
+//
+//import org.ktorm.schema.Table
+//import org.ktorm.schema.date
+//import org.ktorm.schema.int
+//import org.ktorm.schema.varchar
+//
 
-import org.ktorm.schema.Table
-import org.ktorm.schema.date
-import org.ktorm.schema.int
-import org.ktorm.schema.varchar
-
-
-object Stocks : Table<Nothing>("Stocks") {
-    val id = int("ID").primaryKey()
-    val nom = varchar("Nom")
-    val prenom = varchar("Prenom")
-    val mdp = varchar("MDP")
-    val naissance = date("Naissance")
-    val embauche = date("Embauche")
-    val login = varchar("Login")
-}
+//
+//object Stocks : Table<Nothing>("colis") {
+//    val ID = int("ID_Colis").primaryKey()
+//    val Longueur = int("Longueur")
+//    val Largeur = int("Largeur")
+//    val Hauteur = int("Hauteur")
+//    val Poids = int("Poids")
+//}
