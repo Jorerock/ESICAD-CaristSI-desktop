@@ -34,7 +34,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import ktorm.colis
-import ktorm.colonne
 import ui.Element.*
 
 fun main() = application {

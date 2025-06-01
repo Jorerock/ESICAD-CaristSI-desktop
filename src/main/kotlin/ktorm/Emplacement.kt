@@ -10,7 +10,7 @@ object emplacements : Table<Nothing>("emplacement") {
     val ID_Emplacement = int("ID_Emplacement").primaryKey()
     val VolumeMax = int("VolumeMax")
     val PoidsMax = int("PoidsMax")
-    val ID_1 = int(" ID_Etage").primaryKey()
+    val ID_Etage = int(" ID_Etage").primaryKey()
 
 }
 

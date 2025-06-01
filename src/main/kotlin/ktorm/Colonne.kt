@@ -5,10 +5,9 @@ import org.ktorm.schema.date
 import org.ktorm.schema.int
 import org.ktorm.schema.varchar
 
-
-object colonne : Table<Nothing>("colonne") {
-    val ID_colonne = int("ID_colonne").primaryKey()
-    val NumeroCol = int("NumeroCol")
+object colonne_table : org.ktorm.schema.Table<Nothing>("colonne") {
+    val ID_Colonne = int("ID_Colonne").primaryKey()
     val ID_Allee = int("ID_Allee")
+    val NumeroCol = int("NumeroCol")
 }
 

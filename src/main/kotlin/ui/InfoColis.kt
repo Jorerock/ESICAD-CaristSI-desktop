@@ -446,100 +446,96 @@ import java.time.LocalDate
 
 @Composable
 fun InfoColis(database: Database, ColisSelectione: Int, onNavigate: (Routes) -> Unit) {
-    var Stocks = requestColis(ColisSelectione)
-
-    Card(
-        modifier = Modifier.fillMaxWidth().padding(16.dp), elevation = 4.dp
-    ) {
-        Column {
-            Button(
-                onClick = {
-                    onNavigate(Routes.RECHERCHE)  // Retour à la recherche sans changer de route
-                },
-                modifier = Modifier.padding(vertical = 8.dp)
-            ) {
-                Text("Retour")
-            }
-
-            // Le reste de votre code InfoColis reste identique
-            // Table Rows
-            Stocks.forEach { Stock ->
-                var ID by remember { mutableStateOf(Stock.ID_Colis.toString()) }
-                var Longueur by remember { mutableStateOf((Stock.Longueur.toString())) }
-                var Largeur by remember { mutableStateOf(Stock.Largeur.toString()) }
-                var Hauteur by remember { mutableStateOf(Stock.Hauteur.toString()) }
-                var Poids by remember { mutableStateOf(Stock.Poids.toString()) }
-
-                var ID_Allee by remember { mutableStateOf(Stock.ID_Allee.toString()) }
-                var Numero by remember { mutableStateOf(Stock.Numero_Etage.toString()) }
-                var ID_Colonne by remember { mutableStateOf(Stock.ID_Colonne.toString()) }
-                var NumeroCol by remember { mutableStateOf(Stock.NumeroCol.toString()) }
-                var ID_Etage by remember { mutableStateOf(Stock.ID_Etage.toString()) }
-                var Numero_Etage by remember { mutableStateOf(Stock.Numero_Etage.toString()) }
-                var ID_Emplacement by remember { mutableStateOf(Stock.ID_Emplacement.toString()) }
-                var VolumeMax by remember { mutableStateOf(Stock.VolumeMax.toString()) }
-                var PoidsMax by remember { mutableStateOf(Stock.PoidsMax.toString()) }
-                var result by remember { mutableStateOf("") }
-
-                Row {
-                    Text(Stock.ID_Colis.toString(), modifier = Modifier.weight(1f))
-                    OutlinedTextField(
-                        value = Longueur,
-                        onValueChange = { newValue ->
-                            Longueur = newValue
-                            newValue.toIntOrNull()?.let { numCol ->
-                                Longueur = numCol.toString()
-                            }
-                        },
-                        label = { Text("Longueur") },
-                        modifier = Modifier.weight(2f),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-                    )
-
-                    OutlinedTextField(
-                        value = Largeur,
-                        onValueChange = { newValue ->
-                            Largeur = newValue
-                            newValue.toIntOrNull()?.let { numCol ->
-                                Largeur = numCol.toString()
-                            }
-                        },
-                        label = { Text("Largeur") },
-                        modifier = Modifier.weight(3f),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-                    )
-
-                    OutlinedTextField(
-                        value = Hauteur,
-                        onValueChange = { newValue ->
-                            Hauteur = newValue
-                            newValue.toIntOrNull()?.let { numCol ->
-                                Hauteur = numCol.toString()
-                            }
-                        },
-                        label = { Text("Hauteur") },
-                        modifier = Modifier.weight(4f),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-                    )
-
-                    OutlinedTextField(
-                        value = Poids,
-                        onValueChange = { newValue ->
-                            Poids = newValue
-                            newValue.toIntOrNull()?.let { numCol ->
-                                Poids = numCol.toString()
-                            }
-                        },
-                        label = { Text("Poids") },
-                        modifier = Modifier.weight(5f),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-                    )
-                }
-
-                // Reste du code identique...
-
-                // ... Garder le reste de vos composants et fonctions inchangés
-            }
-        }
-    }
+//    var Stocks = requestColis(ColisSelectione)
+//
+//    Card(
+//        modifier = Modifier.fillMaxWidth().padding(16.dp), elevation = 4.dp
+//    ) {
+//        Column {
+//            Button(
+//                onClick = {
+//                    onNavigate(Routes.RECHERCHE)  // Retour à la recherche sans changer de route
+//                },
+//                modifier = Modifier.padding(vertical = 8.dp)
+//            ) {
+//                Text("Retour")
+//            }
+//
+//            // Le reste de votre code InfoColis reste identique
+//            // Table Rows
+//            Stocks.forEach { Stock ->
+//                var ID by remember { mutableStateOf(Stock.id.toString()) }
+//                var Longueur by remember { mutableStateOf((Stock.longueur.toString())) }
+//                var Largeur by remember { mutableStateOf(Stock.largeur.toString()) }
+//                var Hauteur by remember { mutableStateOf(Stock.hauteur.toString()) }
+//                var Poids by remember { mutableStateOf(Stock.poids.toString()) }
+//
+//                var Numero by remember { mutableStateOf(Stock.numeroAllee.toString()) }
+//                var NumeroCol by remember { mutableStateOf(Stock.numeroColonne.toString()) }
+//                var Numero_Etage by remember { mutableStateOf(Stock.numeroEtage.toString()) }
+////                var VolumeMax by remember { mutableStateOf(Stock.VolumeMax.toString()) }
+////                var PoidsMax by remember { mutableStateOf(Stock.PoidsMax.toString()) }
+//                var result by remember { mutableStateOf("") }
+//
+//                Row {
+//                    Text(Stock.id.toString(), modifier = Modifier.weight(1f))
+//                    OutlinedTextField(
+//                        value = Longueur,
+//                        onValueChange = { newValue ->
+//                            Longueur = newValue
+//                            newValue.toIntOrNull()?.let { numCol ->
+//                                Longueur = numCol.toString()
+//                            }
+//                        },
+//                        label = { Text("Longueur") },
+//                        modifier = Modifier.weight(2f),
+//                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+//                    )
+//
+//                    OutlinedTextField(
+//                        value = Largeur,
+//                        onValueChange = { newValue ->
+//                            Largeur = newValue
+//                            newValue.toIntOrNull()?.let { numCol ->
+//                                Largeur = numCol.toString()
+//                            }
+//                        },
+//                        label = { Text("Largeur") },
+//                        modifier = Modifier.weight(3f),
+//                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+//                    )
+//
+//                    OutlinedTextField(
+//                        value = Hauteur,
+//                        onValueChange = { newValue ->
+//                            Hauteur = newValue
+//                            newValue.toIntOrNull()?.let { numCol ->
+//                                Hauteur = numCol.toString()
+//                            }
+//                        },
+//                        label = { Text("Hauteur") },
+//                        modifier = Modifier.weight(4f),
+//                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+//                    )
+//
+//                    OutlinedTextField(
+//                        value = Poids,
+//                        onValueChange = { newValue ->
+//                            Poids = newValue
+//                            newValue.toIntOrNull()?.let { numCol ->
+//                                Poids = numCol.toString()
+//                            }
+//                        },
+//                        label = { Text("Poids") },
+//                        modifier = Modifier.weight(5f),
+//                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+//                    )
+//                }
+//
+//                // Reste du code identique...
+//
+//                // ... Garder le reste de vos composants et fonctions inchangés
+//            }
+//        }
+//    }
 }
