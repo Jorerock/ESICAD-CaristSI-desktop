@@ -135,11 +135,13 @@ fun HomeScreen(onNavigate: (Routes) -> Unit) {
             onClick = { onNavigate(Routes.CARISTES) }
         )
 
-//        MenuButton(
-//            title = "Gestion du stockage",
-//            description = "Gérer les allées, colonnes et emplacements",
-//            onClick = { onNavigate(Routes.ALLEE) }
-//        )
+
+
+        MenuButton(
+            title = "Gestion du stockage",
+            description = "Gérer les allées, colonnes et emplacements",
+            onClick = { onNavigate(Routes.STOCK) }
+        )
 
         Spacer(modifier = Modifier.weight(1f))
 

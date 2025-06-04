@@ -8,7 +8,7 @@ import androidx.compose.runtime.setValue
 enum class Routes(val route: String) {
     LOGIN("LOGIN"),
     HOME("HOME"),
-//    STOCK("STOCK"),
+    STOCK("STOCK"),
     CARISTES("CARISTES"),
     NEWCARISTES("NEWCARISTES"),
 //    CREATEALLEE("CREATEALLEE"),

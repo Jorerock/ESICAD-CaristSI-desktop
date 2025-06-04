@@ -300,21 +300,9 @@ fun App() {
 //                    { route -> router.navigateTo(route) }
 //                )
 
-//                Routes.STOCK -> StockScreen(
-//                    database,
-//                    currentSelectedID,
-//                    { id ->
-//                        try {
-//                            println("recherche de Colis avec : $id")
-//                            currentSelectedID = id
-//                            router.navigateTo(Routes.COLIS)
-//                        } catch (e: Exception) {
-//                            println("Erreur lors de la recherche de colis: ${e.message}")
-//                            // Afficher un message d'erreur à l'utilisateur
-//                        }
-//                    },
-//                    { route -> router.navigateTo(route) }
-//                )
+                Routes.STOCK -> {
+                    GestionStructures(onNavigate = { route -> router.navigateTo(route) })
+                }
 
                 Routes.HOME -> HomeScreen { route -> router.navigateTo(route) }
 
